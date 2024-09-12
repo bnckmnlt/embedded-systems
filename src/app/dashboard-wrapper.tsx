@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MQTTPayload } from "./page";
 import React from "react";
 import { MQTTContext } from "./mqtt-provider";
 

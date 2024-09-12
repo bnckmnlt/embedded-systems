@@ -1,0 +1,130 @@
+{
+  "id": "a9c68574-489a-423f-b778-b323c3440c0e",
+  "prevId": "41c81187-1281-4e2c-b920-ad4df16ec8e2",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.humidity": {
+      "name": "humidity",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "max_humidity": {
+          "name": "max_humidity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "min_humidity": {
+          "name": "min_humidity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.temperature": {
+      "name": "temperature",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "max_temp": {
+          "name": "max_temp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "min_temp": {
+          "name": "min_temp",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    },
+    "public.ultrasonic": {
+      "name": "ultrasonic",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "max_distance": {
+          "name": "max_distance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "min_distance": {
+          "name": "min_distance",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {}
+    }
+  },
+  "enums": {
+    "public.user_system_enum": {
+      "name": "user_system_enum",
+      "schema": "public",
+      "values": [
+        "system",
+        "user"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}

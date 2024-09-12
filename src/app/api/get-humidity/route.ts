@@ -7,7 +7,7 @@ export const GET = async (req: Request, res: Response) => {
   try {
     const humidityData = await db
       .select({
-        time: sql<string>`TO_CHAR(${humidity.createdAt}, 'HH12:MI')`,
+        time: sql<string>`${humidity.createdAt}`,
         highIndex: sql<number>`${humidity.maxHumidity}`,
         lowIndex: sql<number>`${humidity.minHumidity}`,
       })
@@ -17,6 +17,9 @@ export const GET = async (req: Request, res: Response) => {
     return NextResponse.json(humidityData);
   } catch (error) {
     console.error("Error fetching temperature data:", error);
-    return NextResponse.json({ message: "Something went wrong" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Something went wrong" },
+      { status: 500 },
+    );
   }
 };

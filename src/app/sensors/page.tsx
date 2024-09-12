@@ -504,9 +504,118 @@ function HCSR04Component({
             </PolarRadiusAxis>
           </RadialBarChart>
         </ChartContainer>
+        <UltrasonicChartComponent />
       </CardContent>
-      <CardFooter></CardFooter>
     </Card>
+  );
+}
+
+function UltrasonicChartComponent() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["ultrasonic"],
+    queryFn: async () => {
+      const response = await axios.get("/api/get-ultrasonic");
+      return response.data;
+    },
+  });
+
+  const chartConfig = {
+    lowIndex: {
+      label: "Minimum",
+      color: "hsl(var(--chart-2))",
+    },
+    highIndex: {
+      label: "Maximum",
+      color: "hsl(var(--chart-1))",
+    },
+  } satisfies ChartConfig;
+
+  if (isLoading) {
+    return <Skeleton className="h-48 w-full" />;
+  }
+
+  return (
+    <ChartContainer config={chartConfig}>
+      <AreaChart
+        accessibilityLayer
+        data={data}
+        margin={{
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+        }}
+      >
+        <XAxis
+          hide
+          dataKey="time"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+          minTickGap={32}
+          tickFormatter={(value) => {
+            const date = new Date(value);
+            return date.toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+            });
+          }}
+        />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent indicator="dot" />}
+          labelFormatter={(value) => {
+            const date = new Date(value);
+            return date.toLocaleTimeString("en-US", {
+              hour: "numeric",
+              minute: "numeric",
+            });
+          }}
+        />
+        <defs>
+          <linearGradient id="fillHighIndex" x1="0" y1="0" x2="0" y2="1">
+            <stop
+              offset="5%"
+              stopColor="var(--color-highIndex)"
+              stopOpacity={0.8}
+            />
+            <stop
+              offset="95%"
+              stopColor="var(--color-highIndex)"
+              stopOpacity={0.1}
+            />
+          </linearGradient>
+          <linearGradient id="fillLowIndex" x1="0" y1="0" x2="0" y2="1">
+            <stop
+              offset="5%"
+              stopColor="var(--color-lowIndex)"
+              stopOpacity={0.8}
+            />
+            <stop
+              offset="95%"
+              stopColor="var(--color-lowIndex)"
+              stopOpacity={0.1}
+            />
+          </linearGradient>
+        </defs>
+        <Area
+          dataKey="lowIndex"
+          type="natural"
+          fill="url(#fillLowIndex)"
+          fillOpacity={0.4}
+          stroke="var(--color-lowIndex)"
+          stackId="a"
+        />
+        <Area
+          dataKey="highIndex"
+          type="natural"
+          fill="url(#fillHighIndex)"
+          fillOpacity={0.4}
+          stroke="var(--color-highIndex)"
+          stackId="a"
+        />
+      </AreaChart>
+    </ChartContainer>
   );
 }
 

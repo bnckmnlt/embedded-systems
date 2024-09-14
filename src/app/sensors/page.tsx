@@ -292,6 +292,7 @@ function HCSR04Component({
   const [distance, setDistance] = React.useState<number>(0);
   const { clientRef } = useMQTTClient();
   const { toast } = useToast();
+  const [toastEnabled, setToastEnabled] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (distance != null) {
@@ -311,21 +312,22 @@ function HCSR04Component({
   }, [currentUnit]);
 
   React.useEffect(() => {
-    if (hcsr04Data) {
-      if (hcsr04Data.distance !== null) {
-        setDistance(hcsr04Data.distance);
+    if (hcsr04Data && hcsr04Data.distance !== null) {
+      setDistance(hcsr04Data.distance);
 
-        if (distance >= 12) {
-          toast({
-            variant: "destructive",
-            title: "Distance Reached",
-            description:
-              "Object distance is >= 12 cm. Reposition the object near the sensor",
-          });
-        }
+      if (hcsr04Data.distance >= 12 && !toastEnabled) {
+        setToastEnabled(true);
+        toast({
+          variant: "destructive",
+          title: "Distance Reached",
+          description:
+            "Object distance is >= 12 cm. Reposition the object near the sensor",
+        });
+      } else if (hcsr04Data.distance < 12 && toastEnabled) {
+        setToastEnabled(false);
       }
     }
-  }, [hcsr04Data]);
+  }, [hcsr04Data, toastEnabled]);
 
   React.useEffect(() => {
     if (currentFrequency || currentUnit) {

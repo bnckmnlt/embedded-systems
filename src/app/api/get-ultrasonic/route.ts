@@ -1,18 +1,17 @@
 import { db } from "@/lib/db";
 import { ultrasonic } from "@/lib/db/schema";
-import { asc, desc, sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export const GET = async (req: Request, res: Response) => {
   try {
     const distanceData = await db
       .select({
-        time: sql<string>`${ultrasonic.createdAt}`,
-        highIndex: sql<number>`${ultrasonic.maxDistance}`,
-        lowIndex: sql<number>`${ultrasonic.minDistance}`,
+        time: ultrasonic.createdAt,
+        highIndex: ultrasonic.maxDistance,
+        lowIndex: ultrasonic.minDistance,
       })
       .from(ultrasonic)
-      .orderBy(asc(ultrasonic.createdAt));
+      .orderBy(ultrasonic.createdAt);
 
     return NextResponse.json(distanceData);
   } catch (error) {

@@ -15,6 +15,13 @@
       "when": 1725592085394,
       "tag": "0001_nostalgic_tyger_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726138115381,
+      "tag": "0002_unusual_leo",
+      "breakpoints": true
     }
   ]
 }

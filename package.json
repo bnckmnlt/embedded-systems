@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev && concurrently \"npx drizzle-kit studio\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "gen": "npx drizzle-kit generate",
-    "push": "npx drizzle-kit push"
+    "db:gen": "drizzle-kit generate",
+    "db:push": "drizzle-kit push"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.9.4",
@@ -28,6 +28,7 @@
     "axios": "^1.7.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "concurrently": "^9.0.1",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
@@ -36,6 +37,7 @@
     "mqtt": "^5.10.1",
     "next": "14.2.7",
     "next-themes": "^0.3.0",
+    "postgres": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
     "recharts": "^2.12.7",

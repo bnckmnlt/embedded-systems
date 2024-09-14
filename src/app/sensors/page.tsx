@@ -85,10 +85,10 @@ export default function Sensors() {
     humidity: number;
   } = data["raspi/sensors/dht11/data"];
   const hcsr04Status: SensorConnectionStatus =
-    data["raspi/sensors/hc-sr04/status"];
+    data["raspi/sensors/hc-sr04/1/status"];
   const hcsr04Data: {
     distance: number;
-  } = data["raspi/sensors/hc-sr04/data"];
+  } = data["raspi/sensors/hc-sr04/1/data"];
   const hcsr042ndStatus: SensorConnectionStatus =
     data["raspi/sensors/hc-sr04/2/status"];
   const hcsr042ndData: {

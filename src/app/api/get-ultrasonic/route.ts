@@ -11,7 +11,7 @@ export const GET = async (req: Request, res: Response) => {
         lowIndex: ultrasonic.minDistance,
       })
       .from(ultrasonic)
-      .orderBy(ultrasonic.createdAt);
+      .orderBy(ultrasonic.createdAt).limit(8);
 
     return NextResponse.json(distanceData);
   } catch (error) {

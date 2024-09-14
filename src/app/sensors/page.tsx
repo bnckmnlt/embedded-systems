@@ -453,10 +453,10 @@ function HCSR04Component({
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
+      <CardContent className="bg-transparent p-0">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
+          className="mx-auto aspect-square h-full max-h-[250px]"
         >
           <RadialBarChart
             data={chartData}
@@ -569,6 +569,8 @@ function UltrasonicChartComponent() {
           labelFormatter={(value) => {
             const date = new Date(value);
             return date.toLocaleTimeString("en-US", {
+              day: "numeric",
+              month: "long",
               hour: "numeric",
               minute: "numeric",
             });

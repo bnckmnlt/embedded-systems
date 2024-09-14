@@ -89,6 +89,11 @@ export default function Sensors() {
   const hcsr04Data: {
     distance: number;
   } = data["raspi/sensors/hc-sr04/data"];
+  const hcsr042ndStatus: SensorConnectionStatus =
+    data["raspi/sensors/hc-sr04/2/status"];
+  const hcsr042ndData: {
+    distance: number;
+  } = data["raspi/sensors/hc-sr04/2/data"];
 
   return (
     <div>
@@ -355,7 +360,7 @@ function HCSR04Component({
   const chartConfig = {
     ultrasonic: {
       label: "Ultrasonic",
-      color: `${chartData[0].value >= 12 ? "hsl(var(--chart-5))" : "hsl(var(--chart-1))"}`,
+      color: `${chartData[0].value >= 12 ? "hsl(var(--chart-1))" : "hsl(var(--chart-2))"}`,
     },
   } satisfies ChartConfig;
 
@@ -517,7 +522,8 @@ function UltrasonicChartComponent() {
     queryKey: ["ultrasonic"],
     queryFn: async () => {
       const response = await axios.get("/api/get-ultrasonic");
-      return response.data;
+      console.log(response.data);
+      return response.data.reverse();
     },
   });
 

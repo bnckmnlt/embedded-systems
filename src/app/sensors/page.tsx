@@ -114,6 +114,7 @@ export default function Sensors() {
             <HCSR04Component
               hcsr04Status={hcsr04Status}
               hcsr04Data={hcsr04Data}
+              api="get-ultrasonic"
             />
             <Card className="flex h-64 items-start justify-end">
               <CardHeader>
@@ -124,6 +125,11 @@ export default function Sensors() {
             </Card>
           </div>
           <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
+            <HCSR04Component
+              hcsr04Status={hcsr042ndStatus}
+              hcsr04Data={hcsr042ndData}
+              api="get-ultrasonic-2nd"
+            />
             <Card className="flex h-64 items-start justify-end">
               <CardHeader>
                 <Badge variant={"outline"} className="w-min text-nowrap">
@@ -284,11 +290,13 @@ interface HCSR04SensorComponentProps {
   hcsr04Data: {
     distance: number;
   };
+  api: string;
 }
 
 function HCSR04Component({
   hcsr04Status,
   hcsr04Data,
+  api,
 }: HCSR04SensorComponentProps) {
   const [currentUnit, setCurrentUnit] = React.useState<string>("centimeter");
   const [currentFrequency, setCurrentFrequency] =
@@ -511,18 +519,21 @@ function HCSR04Component({
             </PolarRadiusAxis>
           </RadialBarChart>
         </ChartContainer>
-        <UltrasonicChartComponent />
+        <UltrasonicChartComponent api={api} />
       </CardContent>
     </Card>
   );
 }
 
-function UltrasonicChartComponent() {
+interface UltrasonicChartComponentProps {
+  api: string;
+}
+
+function UltrasonicChartComponent({ api }: UltrasonicChartComponentProps) {
   const { data, isLoading } = useQuery({
     queryKey: ["ultrasonic"],
     queryFn: async () => {
-      const response = await axios.get("/api/get-ultrasonic");
-      console.log(response.data);
+      const response = await axios.get(`/api/${api}`);
       return response.data.reverse();
     },
   });

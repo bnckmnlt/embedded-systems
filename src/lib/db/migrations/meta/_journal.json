@@ -22,6 +22,13 @@
       "when": 1726138115381,
       "tag": "0002_unusual_leo",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726376425788,
+      "tag": "0003_opposite_karnak",
+      "breakpoints": true
     }
   ]
 }

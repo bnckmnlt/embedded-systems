@@ -10,6 +10,8 @@ const stringToBoolean = z.coerce
   .default("false");
 
 export const EnvSchema = z.object({
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
   NODE_ENV: z.string().default("development"),
   DB_USER: z.string(),
   DB_PASS: z.string(),

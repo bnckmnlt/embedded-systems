@@ -2,11 +2,13 @@
 
 import React, { useEffect } from "react";
 import {
+  Axis3D,
   Bell,
   ServerCrash,
   Settings,
   Thermometer,
   TrendingUp,
+  TriangleAlertIcon,
   WindIcon,
 } from "lucide-react";
 import {
@@ -36,6 +38,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   Area,
   AreaChart,
+  Bar,
+  BarChart,
   CartesianGrid,
   Label,
   PolarAngleAxis,
@@ -71,10 +75,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/hooks/use-toast";
+import CameraModuleComponent from "@/components/CameraModuleComponent";
 
-interface SensorConnectionStatus {
+export type SensorConnectionStatus = {
   isActive: boolean;
-}
+};
 
 export default function Sensors() {
   const { connectionStatus, data } = useMQTTClient();
@@ -100,17 +105,11 @@ export default function Sensors() {
       <div className="w-full space-y-4">
         <h2 className="text-lg font-semibold">Sensors</h2>
         <div className="flex w-full flex-col flex-wrap items-start justify-start gap-6 sm:flex-row">
-          <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[28rem] lg:grid-cols-1 xl:max-w-[32rem]">
+          <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[28rem] lg:grid-cols-1 xl:max-w-[38rem]">
             <DHTSensorComponent dhtStatus={dhtStatus} dhtData={dhtData} />
-            <Card className="flex h-64 items-start justify-end">
-              <CardHeader>
-                <Badge variant={"outline"} className="w-min text-nowrap">
-                  GPS Module
-                </Badge>
-              </CardHeader>
-            </Card>
+            <CameraModuleComponent cameraModuleStatus={hcsr042ndStatus} />
           </div>
-          <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
+          <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
             <HCSR04Component
               hcsr04Status={hcsr04Status}
               hcsr04Data={hcsr04Data}
@@ -124,7 +123,7 @@ export default function Sensors() {
               </CardHeader>
             </Card>
           </div>
-          <div className="grid w-full flex-1 gap-6 lg:max-w-[20rem]">
+          <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
             <HCSR04Component
               hcsr04Status={hcsr042ndStatus}
               hcsr04Data={hcsr042ndData}
@@ -333,8 +332,12 @@ function HCSR04Component({
         toast({
           variant: "destructive",
           title: "Distance Reached",
-          description:
-            "Object distance is >= 12 cm. Reposition the object near the sensor",
+          description: (
+            <div className="flex flex-row items-center justify-start gap-2">
+              <TriangleAlertIcon size={32} /> Distance reached. Adjust the
+              object.
+            </div>
+          ),
         });
       } else if (hcsr04Data.distance < 12 && toastEnabled) {
         setToastEnabled(false);
@@ -467,57 +470,45 @@ function HCSR04Component({
         </CardTitle>
       </CardHeader>
       <CardContent className="bg-transparent p-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square h-full max-h-[250px]"
-        >
-          <RadialBarChart
+        <div className="ml-8 mt-8">
+          <div className="text-7xl font-bold tracking-tight">
+            {distance}
+            <span className="text-2xl font-semibold tracking-tight">
+              {" "}
+              {currentUnit}
+            </span>
+          </div>
+        </div>
+        <ChartContainer config={chartConfig} className="mb-12 mt-4 h-16">
+          <BarChart
+            className="h-12"
+            accessibilityLayer
             data={chartData}
-            startAngle={90}
-            endAngle={calculatedEndAngle}
-            innerRadius={80}
-            outerRadius={140}
+            layout="vertical"
+            margin={{
+              left: -20,
+            }}
           >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
+            <YAxis
+              dataKey="ultrasonic"
+              type="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)}
             />
-            <RadialBar dataKey="value" background />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-5xl font-bold tracking-tighter"
-                        >
-                          {chartData[0].value.toFixed(0).toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 28}
-                          className="fill-muted-foreground"
-                        >
-                          {currentUnit}
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <XAxis
+              type="number"
+              dataKey="value"
+              domain={[0, calculatedEndAngle]}
+              hide
+            />
+            <Bar dataKey="value" fill="var(--color-ultrasonic)" radius={5} />
+          </BarChart>
         </ChartContainer>
         <UltrasonicChartComponent api={api} />
       </CardContent>
@@ -533,7 +524,9 @@ function UltrasonicChartComponent({ api }: UltrasonicChartComponentProps) {
   const { data, isLoading } = useQuery({
     queryKey: ["ultrasonic"],
     queryFn: async () => {
-      const response = await axios.get(`/api/${api}`);
+      const response = await axios.get(
+        `/api/${api === "get-ultrasonic" ? "get-ultrasonic" : "get-ultrasonic-2nd"}`,
+      );
       return response.data.reverse();
     },
   });
@@ -581,6 +574,7 @@ function UltrasonicChartComponent({ api }: UltrasonicChartComponentProps) {
           }}
         />
         <ChartTooltip
+          active={true}
           cursor={false}
           content={<ChartTooltipContent indicator="dot" />}
           labelFormatter={(value) => {
@@ -646,7 +640,7 @@ interface ChartProps {
 
 function ChartComponent({ currentUnit }: ChartProps) {
   const { data, isLoading } = useQuery({
-    queryKey: [currentUnit],
+    queryKey: ["unit", currentUnit],
     queryFn: async () => {
       const response = await axios.get(`api/get-${currentUnit}`);
       return response.data;

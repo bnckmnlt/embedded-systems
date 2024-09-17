@@ -7,7 +7,7 @@ if (!process.env.DB_URL_EXPANDED) {
   throw new Error("Database url not found");
 }
 
-export const sql = neon(process.env.DB_URL_EXPANDED! || env.DB_URL );
+export const sql = neon(process.env.DB_URL_EXPANDED! || env.DB_URL);
 export const db = drizzle(sql, { schema });
 
 export type db = typeof db;

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1725261181582,
-      "tag": "0000_long_felicia_hardy",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1725592085394,
-      "tag": "0001_nostalgic_tyger_tiger",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1726138115381,
-      "tag": "0002_unusual_leo",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1726376425788,
-      "tag": "0003_opposite_karnak",
+      "when": 1726547861639,
+      "tag": "0000_ambiguous_payback",
       "breakpoints": true
     }
   ]

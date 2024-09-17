@@ -12,7 +12,7 @@ export const POST = async (req: NextRequest) => {
   try {
     const formData = await req.formData();
 
-    const file = formData.get("media") as Blob | null;
+    const file = formData.get("media") as File | null;
 
     if (!file) {
       return NextResponse.json(
@@ -22,7 +22,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const uniqueSuffix = `${Date.now()}_${Math.round(Math.random() * 1e9)}`;
-    const fileExtension = extname(file.name);
+    const fileExtension = extname(file["name"]);
     const originalFilename = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
     const sanitizedFilename = sanitizeFilename(originalFilename);
     const filename = `${sanitizedFilename}_${uniqueSuffix}${fileExtension}`;

@@ -47,7 +47,7 @@ export default function CameraModuleComponent({
           </div>
         </CardHeader>
         <CardContent>
-          {data && <DataTableComponent data={data} columns={columns} />}
+          {/* {data && <DataTableComponent data={data} columns={columns} />} */}
         </CardContent>
       </Card>
     )

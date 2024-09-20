@@ -41,7 +41,10 @@ const geist = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Embedded Systems",
+  title: {
+    template: "%s | Embedded Systems",
+    default: "Embedded Systems",
+  },
   description: "Raspberry Pi IoT Sensor's Playground",
 };
 

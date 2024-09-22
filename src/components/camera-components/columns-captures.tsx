@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { ArrowUpDown } from "lucide-react";
 import ShowImageComponent from "./ShowImageComponent";
 
@@ -14,13 +14,6 @@ export type Captures = {
 };
 
 export const columns: ColumnDef<Captures>[] = [
-  // {
-  //   accessorKey: "path",
-  //   header: "",
-  //   cell: ({ row }) => {
-  //     return <MediaComponent path={row.getValue("path")} />;
-  //   },
-  // },
   {
     accessorKey: "path",
     header: "Filename",

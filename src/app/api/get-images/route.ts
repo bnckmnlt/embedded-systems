@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest) => {
     })
     .from(captures)
     .orderBy(desc(captures.createdAt))
-    .limit(30);
+    .limit(34);
 
   return NextResponse.json(_captures);
 };

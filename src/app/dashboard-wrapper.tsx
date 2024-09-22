@@ -134,17 +134,28 @@ interface DashboardProps {
   children: React.ReactNode;
 }
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 6 * 1000,
+      refetchInterval: 6 * 1000,
+    },
+  },
+});
 
 const topics = [
   "raspi/board/data",
   "raspi/board/status",
+  "raspi/camera/data",
+  "raspi/camera/status",
   "raspi/sensors/dht11/status",
   "raspi/sensors/dht11/data",
   "raspi/sensors/hc-sr04/1/status",
   "raspi/sensors/hc-sr04/1/data",
   "raspi/sensors/hc-sr04/2/status",
   "raspi/sensors/hc-sr04/2/data",
+  "raspi/sensors/pir/status",
+  "raspi/sensors/pir/data",
 ];
 
 const DashboardWrapper: React.FC<DashboardProps> = ({
@@ -155,11 +166,11 @@ const DashboardWrapper: React.FC<DashboardProps> = ({
   const { connectionStatus, data, clientRef } = useMQTT({ topics });
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <MQTTContext.Provider value={{ connectionStatus, data, clientRef }}>
+    <MQTTContext.Provider value={{ connectionStatus, data, clientRef }}>
+      <QueryClientProvider client={queryClient}>
         <DashboardLayout>{children}</DashboardLayout>
-      </MQTTContext.Provider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </MQTTContext.Provider>
   );
 };
 

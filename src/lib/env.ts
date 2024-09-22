@@ -21,6 +21,8 @@ export const EnvSchema = z.object({
   DB_URL: z.string(),
   DB_MIGRATING: stringToBoolean,
   DB_SEEDING: stringToBoolean,
+  MAILGUN_API_KEY: z.string(),
+  MAILGUN_DOMAIN: z.string(),
 });
 
 export type EnvSchema = typeof EnvSchema;

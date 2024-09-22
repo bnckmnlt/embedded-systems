@@ -75,15 +75,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/hooks/use-toast";
-import CameraModuleComponent from "@/components/CameraModuleComponent";
+import CameraModuleComponent from "$/src/components/camera-components/CameraModuleComponent";
 
 export type SensorConnectionStatus = {
   isActive: boolean;
 };
 
 export default function Sensors() {
-  const { connectionStatus, data } = useMQTTClient();
+  const { data } = useMQTTClient();
 
+  const cameraModuleStatus: SensorConnectionStatus =
+    data["raspi/camera/status"];
+  const cameraModuleData: {
+    recording: boolean;
+    sending: boolean;
+    error: boolean;
+    success: boolean;
+  } = data["raspi/camera/data"];
+  const pirModuleStatus: SensorConnectionStatus =
+    data["raspi/sensors/pir/status"];
+  const pirModuleData: {
+    objectDetected: boolean;
+  } = data["raspi/sensors/pir/data"];
   const dhtStatus: SensorConnectionStatus = data["raspi/sensors/dht11/status"];
   const dhtData: {
     temperature: number;
@@ -107,7 +120,12 @@ export default function Sensors() {
         <div className="flex w-full flex-col flex-wrap items-start justify-start gap-6 sm:flex-row">
           <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[28rem] lg:grid-cols-1 xl:max-w-[38rem]">
             <DHTSensorComponent dhtStatus={dhtStatus} dhtData={dhtData} />
-            <CameraModuleComponent cameraModuleStatus={hcsr042ndStatus} />
+            <CameraModuleComponent
+              cameraModuleStatus={cameraModuleStatus}
+              cameraModuleData={cameraModuleData}
+              pirModuleStatus={pirModuleStatus}
+              pirModuleData={pirModuleData}
+            />
           </div>
           <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
             <HCSR04Component

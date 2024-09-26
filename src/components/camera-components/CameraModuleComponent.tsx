@@ -18,6 +18,7 @@ import { SensorConnectionStatus } from "@/app/sensors/page";
 import {
   ArrowRightLeft,
   ArrowRightLeftIcon,
+  Camera,
   CircleCheck,
   CloudUpload,
   VideoIcon,
@@ -27,6 +28,9 @@ import CameraModuleGraph from "./camera-module-graph";
 import { DataTableComponent } from "./data-table-captures";
 import { Button } from "../ui/button";
 import { fetchImagesTable } from "$/server/actions/actions";
+import { useMQTTClient } from "$/src/app/mqtt-provider";
+import { Switch } from "../ui/switch";
+import { Label } from "../ui/label";
 
 type CameraModuleComponentProps = {
   cameraModuleStatus: SensorConnectionStatus;
@@ -50,6 +54,9 @@ export default function CameraModuleComponent({
 }: CameraModuleComponentProps) {
   const [motionDetected, setMotionDetected] = React.useState<boolean>(false);
   const [switched, setSwitched] = React.useState<boolean>(false);
+  const [lastData, setLastData] = React.useState<string | null>(null);
+  const { clientRef } = useMQTTClient();
+  const [cameraMode, setcameraMode] = React.useState<string>("video");
 
   const { data, isLoading } = useQuery({
     queryKey: ["images_table"],
@@ -71,6 +78,64 @@ export default function CameraModuleComponent({
     }
   }, [pirModuleData, motionDetected]);
 
+  React.useEffect(() => {
+    if (data) {
+      let rawDate = data[0].date;
+      const date = new Date(rawDate.replace(" ", "T"));
+
+      // Array of month names
+      const monthNames = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+
+      const month = monthNames[date.getMonth()];
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const hours = date.getHours().toString().padStart(2, "0");
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+
+      const formattedDate = `${month} ${day}, ${year} at ${hours}:${minutes}`;
+      setLastData(formattedDate);
+    }
+  }, [data]);
+
+  async function captureImage() {
+    clientRef.current.publish(
+      "raspi/camera/manual",
+      Buffer.from(JSON.stringify({ capture: 1 })),
+      { qos: 0 },
+    );
+  }
+
+  function setCamera() {
+    if (cameraMode == "camera") {
+      setcameraMode("video");
+      clientRef.current.publish(
+        "raspi/camera/manual/mode",
+        Buffer.from(JSON.stringify({ mode: 1 })),
+        { qos: 0 },
+      );
+    } else {
+      setcameraMode("camera");
+      clientRef.current.publish(
+        "raspi/camera/manual/mode",
+        Buffer.from(JSON.stringify({ mode: 0 })),
+        { qos: 0 },
+      );
+    }
+  }
+
   return (
     !isLoading && (
       <Card>
@@ -90,16 +155,30 @@ export default function CameraModuleComponent({
               </div>
               {cameraModuleStatus?.isActive ? "Active" : "Disconnected"}
             </Badge>
-            <Button
-              variant={"outline"}
-              size={"icon"}
-              onClick={() => setSwitched(!switched)}
-            >
-              <ArrowRightLeftIcon className="h-4 w-4" />
-            </Button>
+            <div className="flex flex-row gap-2">
+              <Button
+                variant={"outline"}
+                size={"icon"}
+                onClick={() => setSwitched(!switched)}
+              >
+                <ArrowRightLeftIcon className="h-4 w-4" />
+              </Button>
+              <Button size={"icon"} variant={"outline"} onClick={captureImage}>
+                <Camera className="h-4 w-4" />
+              </Button>
+              <div className="flex items-center space-x-2 pl-1">
+                <Switch id="airplane-mode" onCheckedChange={setCamera} />
+                <Label
+                  htmlFor="airplane-mode"
+                  className="text-xs tracking-tight"
+                >
+                  Switch to Capture Mode
+                </Label>
+              </div>
+            </div>
           </div>
           {!switched ? (
-            <div className="grid items-center gap-4 md:grid-cols-2">
+            <div className="md:grid-row-4 grid-flow- grid items-center gap-4">
               <div className="space-y-1">
                 <div className="text-base font-medium tracking-tight text-muted-foreground">
                   Camera status
@@ -140,6 +219,9 @@ export default function CameraModuleComponent({
                   ) : (
                     <Skeleton className="h-12 w-1/2" />
                   )}
+                  <div className="mt-2 text-xs italic tracking-tight text-muted-foreground">
+                    Last captured on <span>{lastData}</span>
+                  </div>
                 </div>
               </div>
               <div className="space-y-1">

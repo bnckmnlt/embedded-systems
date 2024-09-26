@@ -8,14 +8,6 @@ function sanitizeFilename(filename: string): string {
   return filename.replace(/[^a-zA-Z0-9_\u0600-\u06FF.]/g, "_");
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "50mb",
-    },
-  },
-};
-
 export const POST = async (req: NextRequest) => {
   try {
     const formData = await req.formData();

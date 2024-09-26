@@ -76,6 +76,8 @@ import {
 } from "@/components/ui/tooltip";
 import { useToast } from "@/components/hooks/use-toast";
 import CameraModuleComponent from "$/src/components/camera-components/CameraModuleComponent";
+import GasSensorComponent from "$/src/components/gas-sensor/gas-sensor";
+import VibrationSensorComponents from "$/src/components/vibration-sensor/vibration-sensor";
 
 export type SensorConnectionStatus = {
   isActive: boolean;
@@ -133,13 +135,7 @@ export default function Sensors() {
               hcsr04Data={hcsr04Data}
               api="get-ultrasonic"
             />
-            <Card className="flex h-64 items-start justify-end">
-              <CardHeader>
-                <Badge variant={"outline"} className="w-min text-nowrap">
-                  Gas and Vibration Sensor
-                </Badge>
-              </CardHeader>
-            </Card>
+            <VibrationSensorComponents />
           </div>
           <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
             <HCSR04Component
@@ -147,13 +143,7 @@ export default function Sensors() {
               hcsr04Data={hcsr042ndData}
               api="get-ultrasonic-2nd"
             />
-            <Card className="flex h-64 items-start justify-end">
-              <CardHeader>
-                <Badge variant={"outline"} className="w-min text-nowrap">
-                  Sound and Raindrop Sensor
-                </Badge>
-              </CardHeader>
-            </Card>
+            <GasSensorComponent />
             <Card className="flex h-64 items-start justify-end">
               <CardHeader>
                 <Badge variant={"outline"} className="w-min text-nowrap">

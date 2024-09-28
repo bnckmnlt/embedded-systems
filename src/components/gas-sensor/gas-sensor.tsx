@@ -99,7 +99,7 @@ export default function GasSensorComponent(props: Props) {
             <span className="font-medium tracking-tight text-muted-foreground">
               Gas Concentrations
             </span>
-            <div className="flex w-full flex-col justify-center gap-1">
+            <div className="flex w-full flex-col justify-center gap-2">
               {keyList.map((key) => (
                 <GasIndicator
                   key={key}

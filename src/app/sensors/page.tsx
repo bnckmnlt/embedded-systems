@@ -120,8 +120,23 @@ export default function Sensors() {
       <div className="w-full space-y-4">
         <h2 className="text-lg font-semibold">Sensors</h2>
         <div className="flex w-full flex-col flex-wrap items-start justify-start gap-6 sm:flex-row">
-          <div className="grid w-full gap-6 sm:grid-cols-2 lg:max-w-[28rem] lg:grid-cols-1 xl:max-w-[38rem]">
+          <div className="grid w-full flex-1 gap-6 lg:max-w-[24rem]">
+            <VibrationSensorComponents />
             <DHTSensorComponent dhtStatus={dhtStatus} dhtData={dhtData} />
+          </div>
+          <div className="grid w-full grow gap-6 md:grid-cols-2 lg:max-w-[28rem] lg:grid-cols-1 xl:max-w-[40rem]">
+            <div className="grid-col-1 grid w-full gap-6 md:grid-cols-2">
+              <HCSR04Component
+                hcsr04Status={hcsr04Status}
+                hcsr04Data={hcsr04Data}
+                api="get-ultrasonic"
+              />
+              <HCSR04Component
+                hcsr04Status={hcsr042ndStatus}
+                hcsr04Data={hcsr042ndData}
+                api="get-ultrasonic-2nd"
+              />
+            </div>
             <CameraModuleComponent
               cameraModuleStatus={cameraModuleStatus}
               cameraModuleData={cameraModuleData}
@@ -129,20 +144,7 @@ export default function Sensors() {
               pirModuleData={pirModuleData}
             />
           </div>
-          <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
-            <HCSR04Component
-              hcsr04Status={hcsr04Status}
-              hcsr04Data={hcsr04Data}
-              api="get-ultrasonic"
-            />
-            <VibrationSensorComponents />
-          </div>
-          <div className="grid w-full flex-1 gap-6 lg:max-w-[22rem]">
-            <HCSR04Component
-              hcsr04Status={hcsr042ndStatus}
-              hcsr04Data={hcsr042ndData}
-              api="get-ultrasonic-2nd"
-            />
+          <div className="grid w-full flex-1 gap-6 lg:max-w-[24rem]">
             <GasSensorComponent />
             <Card className="flex h-64 items-start justify-end">
               <CardHeader>

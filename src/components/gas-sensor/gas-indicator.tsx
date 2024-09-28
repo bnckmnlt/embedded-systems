@@ -18,7 +18,7 @@ type GasIndicatorProps = {
 const GasIndicator = ({ label, value }: GasIndicatorProps) => {
   return (
     <div className="flex flex-row items-center gap-4">
-      <span className="w-[64px] min-w-[50px] flex-none text-sm font-medium uppercase tracking-tight">
+      <span className="w-[64px] min-w-[50px] flex-none text-center text-xs font-medium uppercase tracking-tight text-muted-foreground">
         {label}
       </span>
       {value ? (
@@ -28,7 +28,7 @@ const GasIndicator = ({ label, value }: GasIndicatorProps) => {
               <Progress
                 value={value * 1000}
                 max={2}
-                className="h-4 w-full grow rounded-md"
+                className="h-4 w-full grow rounded-md bg-transparent"
               />
             </TooltipTrigger>
             <TooltipContent>

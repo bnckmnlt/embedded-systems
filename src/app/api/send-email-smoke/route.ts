@@ -11,7 +11,7 @@ const mg = new mailgun(formData).client({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { smoke_level: smokeLevel } = body;
+    const { smokeLevel } = body;
 
     if (!smokeLevel) {
       return NextResponse.json({ error: "Missing value" }, { status: 422 });

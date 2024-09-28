@@ -8,7 +8,15 @@ import GasSensorChart from "./GasSensorChart";
 import GasIndicator from "./gas-indicator";
 import { toast } from "../hooks/use-toast";
 
-const keyList = ["co", "h2", "ch4", "lpg", "propane", "alcohol", "smoke"];
+const keyList: (keyof GasSensorDataType["data"])[] = [
+  "co",
+  "h2",
+  "ch4",
+  "lpg",
+  "propane",
+  "alcohol",
+  "smoke",
+];
 
 type GasSensorDataType = {
   gasDetected: boolean;
@@ -94,14 +102,14 @@ export default function GasSensorComponent(props: Props) {
             <div className="flex w-full flex-col justify-center gap-1">
               {keyList.map((key) => (
                 <GasIndicator
-                  key={key} // Ensure unique key for each GasIndicator
+                  key={key}
                   label={key}
-                  value={gasSensorData?.data?.[key]} // Access the value dynamically
+                  value={gasSensorData?.data?.[key]}
                 />
               ))}
             </div>
           </div>
-          {/* <GasSensorChart /> */}
+          <GasSensorChart />
         </CardContent>
       </Card>
     </div>

@@ -15,6 +15,13 @@
       "when": 1727340187255,
       "tag": "0001_right_ken_ellis",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1727408795921,
+      "tag": "0002_sad_spectrum",
+      "breakpoints": true
     }
   ]
 }

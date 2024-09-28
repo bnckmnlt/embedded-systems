@@ -6,3 +6,4 @@ export { default as ultrasonic } from "./ultrasonic";
 export { default as ultrasonic2nd } from "./ultrasonic-2nd";
 export { default as captures } from "./captures";
 export { default as vibration } from "./vibration";
+export { default as gas } from "./gas";

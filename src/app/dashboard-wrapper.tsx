@@ -156,6 +156,10 @@ const topics = [
   "raspi/sensors/hc-sr04/2/data",
   "raspi/sensors/pir/status",
   "raspi/sensors/pir/data",
+  "raspi/sensors/sw420/status",
+  "raspi/sensors/sw420/data",
+  "raspi/sensors/mq2/status",
+  "raspi/sensors/mq2/data",
 ];
 
 const DashboardWrapper: React.FC<DashboardProps> = ({

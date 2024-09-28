@@ -6,4 +6,5 @@ const vibration = pgTable("vibration", {
   createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
 });
 
+type VibrationTable = typeof vibration;
 export default vibration;

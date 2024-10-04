@@ -7,3 +7,5 @@ export { default as ultrasonic2nd } from "./ultrasonic-2nd";
 export { default as captures } from "./captures";
 export { default as vibration } from "./vibration";
 export { default as gas } from "./gas";
+export { default as raindrop } from "./raindrop";
+export { default as sound } from "./sound";

@@ -57,9 +57,9 @@ const VibrationSensorComponents = (props: Props) => {
         </CardHeader>
         <CardContent className="p-0">
           <div className="space-y-1 px-6">
-            <span className="text-base font-medium tracking-tight text-muted-foreground">
+            <div className="text-base font-medium tracking-tight text-muted-foreground">
               SW-420 Module
-            </span>
+            </div>
             {vibrationSensorStatus?.isActive ? (
               vibrationSensorData?.vibrationDetected ? (
                 <p className="animate-pulse text-2xl font-semibold uppercase tracking-tighter text-rose-500">

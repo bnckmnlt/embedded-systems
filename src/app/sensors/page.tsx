@@ -78,6 +78,8 @@ import { useToast } from "@/components/hooks/use-toast";
 import CameraModuleComponent from "$/src/components/camera-components/CameraModuleComponent";
 import GasSensorComponent from "$/src/components/gas-sensor/gas-sensor";
 import VibrationSensorComponents from "$/src/components/vibration-sensor/vibration-sensor";
+import RaindropSensorComponent from "$/src/components/raindrop-sensor/raindrop-sensor";
+import SoundSensorComponent from "$/src/components/sound-sensor/sound-sensor";
 
 export type SensorConnectionStatus = {
   isActive: boolean;
@@ -121,6 +123,7 @@ export default function Sensors() {
         <h2 className="text-lg font-semibold">Sensors</h2>
         <div className="flex w-full flex-col flex-wrap items-start justify-start gap-6 sm:flex-row">
           <div className="grid w-full flex-1 gap-6 lg:max-w-[24rem]">
+            <RaindropSensorComponent />
             <VibrationSensorComponents />
             <DHTSensorComponent dhtStatus={dhtStatus} dhtData={dhtData} />
           </div>
@@ -145,6 +148,7 @@ export default function Sensors() {
             />
           </div>
           <div className="grid w-full flex-1 gap-6 lg:max-w-[24rem]">
+            <SoundSensorComponent />
             <GasSensorComponent />
             <Card className="flex h-64 items-start justify-end">
               <CardHeader>

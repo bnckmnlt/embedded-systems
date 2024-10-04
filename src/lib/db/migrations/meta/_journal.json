@@ -22,6 +22,27 @@
       "when": 1727408795921,
       "tag": "0002_sad_spectrum",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1727930271145,
+      "tag": "0003_many_shinobi_shaw",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1727930309946,
+      "tag": "0004_sloppy_zaran",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1728040126514,
+      "tag": "0005_fixed_colossus",
+      "breakpoints": true
     }
   ]
 }

@@ -79,7 +79,7 @@ export default function GasSensorComponent(props: Props) {
         <CardContent className="p-0">
           <div className="space-y-1 px-6">
             <span className="font-medium tracking-tight text-muted-foreground">
-              MQ2 Status
+              MQ2 Module
             </span>
             {gasSensorStatus?.isActive ? (
               gasSensorData?.gasDetected ? (

@@ -9,3 +9,4 @@ export { default as vibration } from "./vibration";
 export { default as gas } from "./gas";
 export { default as raindrop } from "./raindrop";
 export { default as sound } from "./sound";
+export { default as gps } from "./gps";

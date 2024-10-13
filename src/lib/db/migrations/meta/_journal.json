@@ -43,6 +43,20 @@
       "when": 1728040126514,
       "tag": "0005_fixed_colossus",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1728774189698,
+      "tag": "0006_spotty_molten_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1728774406332,
+      "tag": "0007_organic_kat_farrell",
+      "breakpoints": true
     }
   ]
 }

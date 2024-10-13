@@ -8,6 +8,7 @@ import {
 import { Area, AreaChart, XAxis } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { fetchRaindropRecords } from "$/server/actions/actions";
+import { formatLastRecordDate } from "$/src/lib/utils";
 
 type Props = {};
 
@@ -21,10 +22,18 @@ const RaindropSensorChart = (props: Props) => {
 
   const chartConfig = {
     moisture: {
-      label: "Rain Percentage",
-      color: "hsl(var(--chart-3))",
+      label: "Moisture Level",
+      color: "hsl(var(--chart-1))",
     },
   } satisfies ChartConfig;
+
+  React.useEffect(() => {
+    if (dataRecords) {
+      let formatDate = formatLastRecordDate(dataRecords[0].createdAt as string);
+
+      setFormattedDate(formatDate);
+    }
+  }, [dataRecords]);
 
   return (
     <div>
@@ -65,16 +74,10 @@ const RaindropSensorChart = (props: Props) => {
           />
           <defs>
             <linearGradient id="fillMoisture" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="0%"
-                stopColor="var(--color-moisture)"
-                stopOpacity={0.2}
-              />
-              <stop
-                offset="75%"
-                stopColor="var(--color-moisture)"
-                stopOpacity={0}
-              />
+              <stop offset="0%" stopColor="#f43f5e" stopOpacity={0.5} />
+              <stop offset="25%" stopColor="#f97316" stopOpacity={0.3} />
+              <stop offset="50%" stopColor="#eab308" stopOpacity={0.3} />
+              <stop offset="75%" stopColor="#10b981" stopOpacity={0.3} />
             </linearGradient>
           </defs>
           <Area

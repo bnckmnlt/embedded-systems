@@ -8,6 +8,7 @@ import {
 import { Area, AreaChart, XAxis } from "recharts";
 import { useQuery } from "@tanstack/react-query";
 import { fetchSoundRecords } from "$/server/actions/actions";
+import { formatLastRecordDate } from "$/src/lib/utils";
 
 type Props = {};
 
@@ -25,6 +26,14 @@ const SoundSensorChart = (props: Props) => {
       color: "hsl(var(--chart-3))",
     },
   } satisfies ChartConfig;
+
+  React.useEffect(() => {
+    if (dataRecords) {
+      let formatDate = formatLastRecordDate(dataRecords[0].createdAt as string);
+
+      setFormattedDate(formatDate);
+    }
+  }, [dataRecords]);
 
   return (
     <div>

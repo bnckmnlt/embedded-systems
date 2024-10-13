@@ -80,6 +80,7 @@ import GasSensorComponent from "$/src/components/gas-sensor/gas-sensor";
 import VibrationSensorComponents from "$/src/components/vibration-sensor/vibration-sensor";
 import RaindropSensorComponent from "$/src/components/raindrop-sensor/raindrop-sensor";
 import SoundSensorComponent from "$/src/components/sound-sensor/sound-sensor";
+import GpsSensor from "$/src/components/google-maps-component/gps-sensor";
 
 export type SensorConnectionStatus = {
   isActive: boolean;
@@ -146,6 +147,7 @@ export default function Sensors() {
               pirModuleStatus={pirModuleStatus}
               pirModuleData={pirModuleData}
             />
+            <GpsSensor />
           </div>
           <div className="grid w-full flex-1 gap-6 lg:max-w-[24rem]">
             <SoundSensorComponent />

@@ -5,6 +5,7 @@ import { SensorConnectionStatus } from "$/src/app/sensors/page";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 import SoundSensorChart from "./SoundSensorChart";
+import { toast } from "../hooks/use-toast";
 
 type SoundSensorDataType = {
   soundDetected: boolean;
@@ -13,11 +14,28 @@ type SoundSensorDataType = {
 type Props = {};
 
 const SoundSensorComponent = (props: Props) => {
+  const [toastActive, setToastActive] = React.useState(false);
+
   const { data } = useMQTTClient();
 
   const soundSensorStatus: SensorConnectionStatus =
     data["raspi/sensors/sound/status"];
   const soundSensorData: SoundSensorDataType = data["raspi/sensors/sound/data"];
+
+  React.useEffect(() => {
+    if (soundSensorData) {
+      if (soundSensorData?.soundDetected && !toastActive) {
+        setToastActive(true);
+        toast({
+          variant: "destructive",
+          title: "Sound Detected",
+          description: "Sound detection. The duration is being monitored.",
+        });
+      } else if (soundSensorData?.soundDetected == false) {
+        setToastActive(false);
+      }
+    }
+  }, [soundSensorData]);
 
   return (
     <Card>

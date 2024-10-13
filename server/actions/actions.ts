@@ -2,7 +2,14 @@
 
 import { Vibration } from "$/src/components/vibration-sensor/VibrationSensorChart";
 import db from "$/src/lib/db";
-import { captures, gas, sound, vibration, raindrop } from "$/src/lib/db/schema";
+import {
+  captures,
+  gas,
+  sound,
+  vibration,
+  raindrop,
+  gps,
+} from "$/src/lib/db/schema";
 import { desc, sql } from "drizzle-orm";
 
 export interface Gas {
@@ -20,6 +27,14 @@ export interface Raindrop {
 export interface Sound {
   id: number;
   duration: number;
+  createdAt: string;
+}
+
+export interface Location {
+  id: number;
+  latitude: number;
+  longitude: number;
+  areaName: string;
   createdAt: string;
 }
 
@@ -104,6 +119,12 @@ export async function fetchSingleGasRecord() {
 
 export async function fetchGasRecords(): Promise<Gas[]> {
   const _data = await db.select().from(gas).orderBy(gas.createdAt);
+
+  return _data;
+}
+
+export async function fetchLocationRecords(): Promise<Location[]> {
+  const _data = await db.select().from(gps).orderBy(gps.createdAt);
 
   return _data;
 }

@@ -47,7 +47,7 @@ const VoiceControlledComponent = (props: Props) => {
 
   React.useEffect(() => {
     if (typeof window !== "undefined" && voiceControlledDataResponse) {
-      const synth = window.speechSynthesis;
+      const synth = window?.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(
         voiceControlledDataResponse?.speechResponse,
       );

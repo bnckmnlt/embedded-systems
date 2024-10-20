@@ -9,6 +9,7 @@ import {
   vibration,
   raindrop,
   gps,
+  messages,
 } from "$/src/lib/db/schema";
 import { desc, sql } from "drizzle-orm";
 
@@ -35,6 +36,14 @@ export interface Location {
   latitude: number;
   longitude: number;
   areaName: string;
+  createdAt: string;
+}
+
+export interface Messages {
+  id: number;
+  chatId: number;
+  content: string;
+  userRole: string;
   createdAt: string;
 }
 
@@ -125,6 +134,12 @@ export async function fetchGasRecords(): Promise<Gas[]> {
 
 export async function fetchLocationRecords(): Promise<Location[]> {
   const _data = await db.select().from(gps).orderBy(gps.createdAt);
+
+  return _data;
+}
+
+export async function fetchMessages(): Promise<Messages[]> {
+  const _data = await db.select().from(messages);
 
   return _data;
 }

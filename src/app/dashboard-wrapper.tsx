@@ -21,6 +21,7 @@ import {
   SquareUser,
   LucideIcon,
   Microchip,
+  Locate,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -48,6 +49,11 @@ const sidebarLinks = [
     href: "/playground",
     icon: Bot,
     label: "Playground",
+  },
+  {
+    href: "/maps",
+    icon: Locate,
+    label: "Maps",
   },
   {
     href: "/settings",
@@ -112,7 +118,7 @@ const DashboardLayout: React.FC<DashboardProps> = ({
         </TooltipProvider>
       </aside>
       <main className="flex w-full flex-col">
-        <header className="sticky top-0 z-10 flex h-[53px] items-center justify-between gap-1 border-b bg-background px-4">
+        <header className="sticky top-0 z-50 flex h-[53px] items-center justify-between gap-1 border-b bg-background px-4">
           <h1 className="text-2xl font-semibold">Dashboard</h1>
           <div className="flex flex-row gap-2">
             <div className="relative hidden md:block">
@@ -166,6 +172,12 @@ const topics = [
   "raspi/sensors/raindrop/data",
   "raspi/sensors/gps/status",
   "raspi/sensors/gps/data",
+  "raspi/sensors/voice/status",
+  "raspi/sensors/voice/data/request",
+  "raspi/sensors/voice/data/response",
+  "raspi/sensors/led/red",
+  "raspi/sensors/led/orange",
+  "raspi/sensors/led/blue",
 ];
 
 const DashboardWrapper: React.FC<DashboardProps> = ({

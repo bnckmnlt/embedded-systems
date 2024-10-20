@@ -15,6 +15,7 @@ import { fetchLocationRecords } from "$/server/actions/actions";
 type GpsSensorDataType = {
   lat: 0.0;
   long: 0.0;
+  alt: 0.0;
 };
 
 type Props = {};
@@ -22,6 +23,10 @@ type Props = {};
 const GpsSensor = (props: Props) => {
   const [currentAddress, setCurrentAddress] = React.useState("");
   const [mainEnabled, setMainEnabled] = React.useState(true);
+  const [isMainResponse, setIsMainResponse] = React.useState<boolean>(false);
+  const [audioUrl, setaudioUrl] = React.useState<string | null>(null);
+
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const { data } = useMQTTClient();
 
@@ -47,7 +52,9 @@ const GpsSensor = (props: Props) => {
         status: google.maps.GeocoderStatus,
       ) => {
         if (status === "OK" && results && results[0]) {
-          setCurrentAddress(results[0].formatted_address);
+          setCurrentAddress(
+            results[0].formatted_address.split(",").slice(1).join(","),
+          );
         } else {
           console.error(
             "Geocode was not successful for the following reason: " + status,
@@ -62,8 +69,42 @@ const GpsSensor = (props: Props) => {
     queryFn: async () => await fetchLocationRecords(),
   });
 
+  const { data: audio } = useQuery({
+    queryKey: ["audio"],
+    queryFn: async () => {
+      const res = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: "You are here",
+        }),
+      });
+
+      const data = await res.arrayBuffer();
+
+      const blob = new Blob([data], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(blob);
+
+      if (!isMainResponse && res.status === 200) {
+        console.log(audioUrl);
+        setIsMainResponse(true);
+        setaudioUrl(audioUrl);
+      }
+
+      return audioUrl;
+    },
+  });
+
+  React.useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.src = audioUrl || "";
+    }
+  }, []);
+
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
           <span className="text-sm font-medium leading-none tracking-tight">
@@ -135,13 +176,38 @@ const GpsSensor = (props: Props) => {
                     )}
                   </span>
                 </div>
+                <div className="flex flex-1 flex-col justify-center border-r px-6 py-5">
+                  <span className="text-xs text-muted-foreground">
+                    Altitude
+                  </span>
+                  <span className="truncate text-lg font-bold leading-none sm:text-3xl">
+                    {gpsSensorStatus?.isActive ? (
+                      gpsSensorData?.alt ? (
+                        gpsSensorData?.alt
+                      ) : (
+                        <p className="text-2xl font-semibold uppercase tracking-tighter text-amber-500">
+                          Connecting...
+                        </p>
+                      )
+                    ) : (
+                      <Skeleton className="h-12 w-full rounded-md" />
+                    )}
+                  </span>
+                </div>
+                <div className="hidden">
+                  {audio && (
+                    <audio controls autoPlay>
+                      <source id="audioSource" type="audio/flac" src={audio!} />
+                    </audio>
+                  )}
+                </div>
                 <div className="flex-3 flex flex-col px-6 py-5">
                   <span className="text-nowrap text-xs text-muted-foreground">
                     Current Location
                   </span>
                   {gpsSensorStatus?.isActive ? (
                     currentAddress.length > 0 ? (
-                      <div className="font-medium leading-snug tracking-tight">
+                      <div className="text-3xl font-bold leading-snug tracking-tight">
                         {currentAddress}
                       </div>
                     ) : (
@@ -155,8 +221,11 @@ const GpsSensor = (props: Props) => {
                 </div>
               </div>
             </div>
-            <div>
-              <GoogleMapsComponent data={gpsSensorData} />
+            <div className="h-full">
+              <GoogleMapsComponent
+                data={gpsSensorData}
+                areaName={currentAddress}
+              />
             </div>
           </div>
         ) : (

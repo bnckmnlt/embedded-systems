@@ -6,13 +6,16 @@ import {
   DirectionsRenderer,
   GoogleMap,
   Marker,
+  Polyline, // Import Polyline
   useLoadScript,
 } from "@react-google-maps/api";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import {
   Circle,
+  Clock,
   EllipsisVertical,
+  LandPlot,
   Loader2,
   Locate,
   MapPin,
@@ -23,11 +26,12 @@ type Props = {
     lat: number;
     long: number;
   };
+  areaName: string;
 };
 
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "748px",
 };
 
 type LocationType = {
@@ -35,11 +39,14 @@ type LocationType = {
   lng: number;
 };
 
-const GoogleMapsComponent = ({ data }: Props) => {
+const GoogleMapsComponent = ({ data, areaName }: Props) => {
   const [origin, setOrigin] = useState<string>("");
   const [destination, setDestination] = useState<string>("");
   const [directionsResponse, setDirectionsResponse] =
     useState<google.maps.DirectionsResult | null>(null);
+  const [distance, setDistance] = useState<string | null>(null);
+  const [duration, setDuration] = useState<string | null>(null);
+  const [polylinePath, setPolylinePath] = useState<LocationType[]>([]); // Store path for the trail
 
   const [searchLngLat, setSearchLngLat] = useState<LocationType | null>({
     lat: data?.lat || 0,
@@ -78,6 +85,9 @@ const GoogleMapsComponent = ({ data }: Props) => {
     setOrigin("");
     setDestination("");
     setDirectionsResponse(null);
+    setDistance(null);
+    setDuration(null);
+    setPolylinePath([]); // Reset the trail
   };
 
   const handleLoad = (autocomplete: google.maps.places.Autocomplete) => {
@@ -100,6 +110,19 @@ const GoogleMapsComponent = ({ data }: Props) => {
       (result, status) => {
         if (status === "OK" && result) {
           setDirectionsResponse(result);
+
+          const leg = result.routes[0].legs[0];
+          setDistance(leg.distance?.text || null);
+          setDuration(leg.duration?.text || null);
+
+          // Extract the polyline path from the directions result
+          const polylinePoints = result.routes[0].overview_path.map(
+            (point) => ({
+              lat: point.lat(),
+              lng: point.lng(),
+            }),
+          );
+          setPolylinePath(polylinePoints); // Set the polyline path
         } else {
           console.error(`Error fetching directions ${status}`);
         }
@@ -108,7 +131,7 @@ const GoogleMapsComponent = ({ data }: Props) => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-auto">
       <div className="absolute right-4 top-4 z-10 flex flex-col gap-2 rounded-lg border bg-white p-4">
         <span className="text-xs font-medium text-muted-foreground">
           Get Custom Direction
@@ -155,20 +178,62 @@ const GoogleMapsComponent = ({ data }: Props) => {
           Get Directions
         </Button>
       </div>
-      <div className="absolute bottom-4 right-4 z-10">
+      <div className="absolute bottom-4 left-4 z-10 h-auto w-96 space-y-2">
         <Button size={"icon"} variant={"outline"} onClick={handleResetLocation}>
           <Locate className="h-4 w-4 text-muted-foreground" />
         </Button>
+        <div>
+          <div className="flex flex-col gap-1 rounded-md bg-white px-6 py-5">
+            <span className="font-medium tracking-tight text-muted-foreground">
+              Location
+            </span>
+            <p className="text-3xl font-medium leading-none tracking-tight">
+              {areaName}
+            </p>
+          </div>
+        </div>
       </div>
+      {distance && duration && (
+        <div className="absolute bottom-4 left-4 z-10 rounded-md border bg-white/90 px-4 py-2">
+          <div className="text-sm">
+            <div className="flex flex-row items-center gap-1.5 text-muted-foreground">
+              <LandPlot className="h-4 w-4" />
+              <p className="leading-snug tracking-tight">
+                Distance:{" "}
+                <span className="font-medium text-amber-500">{distance}</span>
+              </p>
+            </div>
+            <div className="flex flex-row items-center gap-1.5 text-muted-foreground">
+              <Clock className="h-4 w-4" />
+              <p className="leading-snug tracking-tight">
+                Estimated Time:{" "}
+                <span className="font-medium text-sky-500">{duration}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <GoogleMap
-        options={{ fullscreenControl: false, disableDefaultUI: true }}
+        options={{}}
         mapContainerStyle={containerStyle}
         center={searchLngLat || { lat: data?.lat, lng: data?.long }}
-        zoom={10}
+        zoom={20}
       >
         {directionsResponse && (
           <DirectionsRenderer directions={directionsResponse} />
         )}
+
+        {polylinePath.length > 0 && (
+          <Polyline
+            path={polylinePath}
+            options={{
+              strokeColor: "#FF0000",
+              strokeOpacity: 0.8,
+              strokeWeight: 5,
+            }}
+          />
+        )}
+
         <Marker
           position={searchLngLat || { lat: data?.lat, lng: data?.long }}
         />

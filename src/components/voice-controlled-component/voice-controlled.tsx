@@ -26,7 +26,6 @@ type VoiceControlledDataResponseType = {
 type Props = {};
 
 const VoiceControlledComponent = (props: Props) => {
-  const [voices, setVoices] = React.useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoice, setSelectedVoice] = React.useState<number>(0);
   const { data } = useMQTTClient();
 
@@ -47,7 +46,7 @@ const VoiceControlledComponent = (props: Props) => {
   });
 
   React.useEffect(() => {
-    if (voiceControlledDataResponse) {
+    if (typeof window !== "undefined" && voiceControlledDataResponse) {
       const synth = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(
         voiceControlledDataResponse?.speechResponse,
@@ -57,7 +56,7 @@ const VoiceControlledComponent = (props: Props) => {
 
       synth.speak(utterance);
     }
-  }, [voiceControlledDataResponse]);
+  }, [voiceControlledDataResponse, selectedVoice]);
 
   return (
     <Card>

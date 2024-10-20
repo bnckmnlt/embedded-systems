@@ -23,8 +23,6 @@ type VoiceControlledDataResponseType = {
   speechResponse: string;
 };
 
-const synth = window.speechSynthesis;
-
 type Props = {};
 
 const VoiceControlledComponent = (props: Props) => {

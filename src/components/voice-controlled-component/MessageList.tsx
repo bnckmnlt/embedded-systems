@@ -1,3 +1,5 @@
+"use client";
+
 import { Messages } from "$/server/actions/actions";
 import { cn } from "$/src/lib/utils";
 import { Loader2 } from "lucide-react";
